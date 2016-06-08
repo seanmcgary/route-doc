@@ -1,0 +1,66 @@
+## Install
+
+```
+npm install --save route-doc
+```
+
+## Usage
+
+```javascript
+
+const express = require('express');
+const RouteDoc = require('route-doc');
+
+const app = express();
+
+app.routeDoc = RouteDoc(app, {
+	errorOnDuplicatePath: true // default, throws error on duplicate route
+	warnOnDuplicatePath: true // default, console.warn on duplicate if no error is thrown
+});
+
+app.routeDoc.get({
+	path: '/users/:userId',
+	query: {
+		token: String,
+		username: {
+			type: String,
+			required: false
+		},
+		someParam: {
+			type: function SomeCustomType(){},
+			required: true
+		}
+	}
+});
+
+// serve route definitions on /routes.json
+app.routeDoc.serveRoutes();
+
+
+```
+
+This configuration will result in a route schema that looks like:
+
+```json
+{
+    "/users/:userId": {
+        "get": {
+            "headers": {},
+            "method": "get",
+            "params": {},
+            "path": "/users/:userId",
+            "query": {
+                "someParam": {
+                    "required": true,
+                    "type": "SomeCustomType"
+                },
+                "token": "String",
+                "username": {
+                    "required": false,
+                    "type": "String"
+                }
+            }
+        }
+    }
+}
+```
