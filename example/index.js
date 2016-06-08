@@ -25,30 +25,17 @@ function m2(req, res, next){
 app.docRoute.get({
 	path: '/users/:userId',
 	query: {
-		token: {
+		token: String,
+		username: {
 			type: String,
 			required: false
 		},
-		username: {
-			type: function UsernameType(){},
-			required: false
-		},
-		foobar: function SomeCustomType(){}
+		someParam: {
+			type: function SomeCustomType(){},
+			required: true
+		}
 	}
-}, m1, m2, (req, res, next) => {
-	res.send('test');
-});
-
-app.docRoute.post({
-	path: '/users/:userId',
-	query: {
-		token: String,
-		foobar: function ValidateFoobar(){}
-	}
-}, m1, m2, (req, res, next) => {
-	res.send('test');
-});
-
+}, m1, m2);
 
 app.listen(9999, () => {
 	console.log('listening');
